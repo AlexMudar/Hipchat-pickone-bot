@@ -26,7 +26,7 @@ app.get('/', function(request, response) {
 	
 	messageText = request.body["item"]["message"]["message"].toString();
 	messageTextArray = messageText.split(" ");
-	randomNumber = Math.floor((Math.random() * messageTextArray.length) + 1);
+	randomNumber = Math.floor((Math.random() * messageTextArray.length));
 	randomWord = messageTextArray[randomNumber];
 	
 	json = JSON.stringify({"color":"gray","message":randomWord,"notify":false,"message_format":"text"});
