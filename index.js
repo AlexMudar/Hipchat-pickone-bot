@@ -29,8 +29,9 @@ app.get('/', function(request, response) {
 	
 	for (x = 0; x<messageTextArray.length; x++){
 		// if the word starts with a / character
-		if (messageTextArray[x].match(^\/) != null){ 
-			messageTextArray.splice(x, 1 );
+		if (messageTextArray[x].substr(0, 1) === "/"){ 	
+			messageTextArray.splice(x, 1);
+			x = x - 1;
 		}
 	}
 	
@@ -43,7 +44,7 @@ app.get('/', function(request, response) {
 	response.end(json);
 });
 
-/*			
+/*				
 	var bodyJson = JSON.parse(body);
 	var athleteID = bodyJson[a]["athlete"]["id"].toString();
 	athleteRanking.push( {id: athleteID, distanceInMiles: distanceInMiles, name: name});
