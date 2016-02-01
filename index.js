@@ -26,6 +26,14 @@ app.get('/', function(request, response) {
 	
 	messageText = request.body["item"]["message"]["message"].toString();
 	messageTextArray = messageText.split(" ");
+	
+	for (x = 0; x<messageTextArray.length; x++){
+		// if the word starts with a / character
+		if (messageTextArray[x].match(^\/) != null){ 
+			messageTextArray.splice(x, 1 );
+		}
+	}
+	
 	randomNumber = Math.floor((Math.random() * messageTextArray.length));
 	randomWord = messageTextArray[randomNumber];
 	
