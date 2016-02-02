@@ -28,8 +28,14 @@ app.get('/', function(request, response) {
 	messageTextArray = messageText.split(" ");
 	
 	for (x = 0; x<messageTextArray.length; x++){
-		// if the word starts with a / character
-		if (messageTextArray[x].substr(0, 1) === "/"){ 	
+
+		// if the word ends in , or . remove it.
+		if (messageTextArray[x].charAt(messageTextArray[x].length-1) === "," || messageTextArray[x].charAt(messageTextArray[x].length-1) === "."){
+			messageTextArray[x] = messageTextArray[x].substr(0, messageTextArray[x].length-1);
+		}
+	
+		// if the word starts with a / character		
+		if (messageTextArray[x].charAt(0) === "/" || messageTextArray[x].toUpperCase() === "OR"){ 	
 			messageTextArray.splice(x, 1);
 			x = x - 1;
 		}
@@ -39,7 +45,7 @@ app.get('/', function(request, response) {
 	randomWord = messageTextArray[randomNumber];
 	
 	json = JSON.stringify({"color":"gray","message":randomWord,"notify":false,"message_format":"text"});
-	
+		
 	response.writeHead(200, {"Content-Type": "application/json"});
 	response.end(json);
 });
