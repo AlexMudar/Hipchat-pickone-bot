@@ -29,14 +29,14 @@ app.get('/', function(request, response) {
 	
 	for (x = 0; x<messageTextArray.length; x++){
 
-		// if the word ends in , or . remove it.
+		// if the word ends in , or . remove the character
 		if (messageTextArray[x].charAt(messageTextArray[x].length-1) === "," || messageTextArray[x].charAt(messageTextArray[x].length-1) === "."){
 			messageTextArray[x] = messageTextArray[x].substr(0, messageTextArray[x].length-1);
 		}
 	
-		// if the word starts with a / character		
+		// if the word starts with a / character, or is an "OR" remove the word from the array		
 		if (messageTextArray[x].charAt(0) === "/" || messageTextArray[x].toUpperCase() === "OR"){ 	
-			messageTextArray.splice(x, 1);
+			messageTextArray.splice(x,1);
 			x = x - 1;
 		}
 	}
