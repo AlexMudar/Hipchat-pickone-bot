@@ -25,17 +25,18 @@ app.get('/', function(request, response) {
 	var randomNumber;
 	
 	messageText = request.body["item"]["message"]["message"].toString();
+	messageText = parseQuestion(messageText);
 	messageTextArray = messageText.split(" ");
 	
 	for (x = 0; x<messageTextArray.length; x++){
 
-		// if the word ends in , or . remove the character
-		if (messageTextArray[x].charAt(messageTextArray[x].length-1) === "," || messageTextArray[x].charAt(messageTextArray[x].length-1) === "."){
+		// if the word ends in any of the following characters, remove it: , . ?
+		if (messageTextArray[x].charAt(messageTextArray[x].length-1) === "," || messageTextArray[x].charAt(messageTextArray[x].length-1) === "." || messageTextArray[x].charAt(messageTextArray[x].length-1) === "?"){
 			messageTextArray[x] = messageTextArray[x].substr(0, messageTextArray[x].length-1);
 		}
 	
-		// if the word starts with a / character, or is an "OR" remove the word from the array		
-		if (messageTextArray[x].charAt(0) === "/" || messageTextArray[x].toUpperCase() === "OR"){ 	
+		// if the word starts with a / character, is an "OR", or is blank. Remove it from the array		
+		if (messageTextArray[x].length === 0 || messageTextArray[x].charAt(0) === "/" || messageTextArray[x].toUpperCase() === "OR"){ 	 
 			messageTextArray.splice(x,1);
 			x = x - 1;
 		}
@@ -49,6 +50,48 @@ app.get('/', function(request, response) {
 	response.writeHead(200, {"Content-Type": "application/json"});
 	response.end(json);
 });
+
+function parseQuestion(originalText){
+	var originalTextArray = originalText.split(" ");
+	for (x = 0; x<originalTextArray.length; x++){
+
+		// if the word ends in any of the following characters, remove the character: . 
+		if (originalTextArray[x].charAt(originalTextArray[x].length-1) === "."){
+			originalTextArray[x] = originalTextArray[x].substr(0, originalTextArray[x].length-1);
+		}
+	
+		// if the word is blank. Remove it from the array		
+		if (originalTextArray[x].length === 0){ 	 
+			originalTextArray.splice(x,1);
+			x = x - 1;
+		}
+	}
+	
+	var slashSpot = 0;
+	
+	for (x = 0; x<originalTextArray.length; x++){
+		// if the word starts with a / character record its position.		
+		if (originalTextArray[x].charAt(0) === "/"){ 	 
+			slashSpot = x;
+		}
+	}
+	
+	if (slashSpot != 0 || slashSpot != originalTextArray.length ){
+		originalTextArray.splice(0, slashSpot + 1);
+	}
+	
+	var cleanText = "";
+	for (x = 0; x<originalTextArray.length; x++){
+		cleanText = cleanText + originalTextArray[x];
+		if (x === originalTextArray.length-1){
+			break;
+		}
+		cleanText = cleanText + " ";
+	}
+
+	return cleanText;
+	
+}
 
 /*				
 	var bodyJson = JSON.parse(body);
