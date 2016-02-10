@@ -60,6 +60,11 @@ function parseQuestion(originalText){
 			originalTextArray[x] = originalTextArray[x].substr(0, originalTextArray[x].length-1);
 		}
 	
+		// if the word starts in any of the following characters, remove the character: \r 
+		if (originalTextArray[x].charAt(0) === "\r"){
+			originalTextArray[x] = originalTextArray[x].substr(1, originalTextArray[x].length-1);
+		}
+	
 		// if the word is blank. Remove it from the array		
 		if (originalTextArray[x].length === 0){ 	 
 			originalTextArray.splice(x,1);
@@ -76,7 +81,7 @@ function parseQuestion(originalText){
 		}
 	}
 	
-	if (slashSpot != 0 || slashSpot != originalTextArray.length ){
+	if (slashSpot != 0 && slashSpot != originalTextArray.length ){
 		originalTextArray.splice(0, slashSpot + 1);
 	}
 	
